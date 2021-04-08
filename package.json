@@ -1,0 +1,20 @@
+{
+  "author": {
+    "name": "antimatter15"
+  },
+  "bugs": {
+    "url": "https://github.com/antimatter15/whammy/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "webm encoder",
+  "homepage": "https://github.com/antimatter15/whammy",
+  "license": "BSD-2-Clause",
+  "main": "whammy.js",
+  "name": "whammy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krystiangw/whammy.git"
+  },
+  "version": "0.0.2"
+}
