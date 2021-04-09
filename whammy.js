@@ -504,7 +504,6 @@ export let Whammy = (function(){
       // frame = frame.toDataURL('image/webp', this.quality);
       // quickly store image data so we don't block cpu. encode in compile method.
       frame = frame.getContext('2d').getImageData(0, 0, frame.width, frame.height);
-      console.log('FRRAME IMAGE DATA ', frame.data.length);
     }else if(typeof frame != "string"){
       throw "frame must be a a HTMLCanvasElement, a CanvasRenderingContext2D or a DataURI formatted string"
     }
