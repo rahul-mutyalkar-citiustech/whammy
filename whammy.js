@@ -37,19 +37,19 @@ function validateFrames(frames) {
 
   for (let i = 1; i < frames.length; i++) {
     const frame = frames[i];
-    
+
     if (frame.width !== width) {
       throw new Error(`Frame ${i + 1} has inconsistent width: ${frame.width} vs ${width}`);
     }
-    
+
     if (frame.height !== height) {
       throw new Error(`Frame ${i + 1} has inconsistent height: ${frame.height} vs ${height}`);
     }
-    
+
     if (frame.duration < 0 || frame.duration > 0x7fff) {
       throw new Error(`Frame ${i + 1} has invalid duration: ${frame.duration} (must be 0-32767)`);
     }
-    
+
     totalDuration += frame.duration;
   }
 
@@ -98,11 +98,11 @@ function bitsToBuffer(bits) {
   const pad = (bits.length % 8) ? '0'.repeat(8 - (bits.length % 8)) : '';
   const paddedBits = pad + bits;
   const data = [];
-  
+
   for (let i = 0; i < paddedBits.length; i += 8) {
     data.push(parseInt(paddedBits.substr(i, 8), 2));
   }
-  
+
   return new Uint8Array(data);
 }
 
@@ -149,11 +149,11 @@ function generateEBML(json, outputAsArray = false) {
 
     // Process element data
     let data = element.data;
-    
+
     if (typeof data === 'object') {
       data = generateEBML(data, outputAsArray);
     } else if (typeof data === 'number') {
-      data = element.size 
+      data = element.size
         ? numToFixedBuffer(data, element.size)
         : bitsToBuffer(data.toString(2));
     } else if (typeof data === 'string') {
@@ -172,7 +172,7 @@ function generateEBML(json, outputAsArray = false) {
     ebml.push(data);
   }
 
-  return outputAsArray 
+  return outputAsArray
     ? new Uint8Array(flattenArray(ebml))
     : new Blob(ebml, { type: 'video/webm' });
 }
@@ -241,7 +241,7 @@ function parseRIFF(string) {
 function parseWebP(riff) {
   const VP8 = riff.RIFF[0].WEBP[0];
   const frameStart = VP8.indexOf('\x9d\x01\x2a'); // VP8 keyframe header
-  
+
   const bytes = [];
   for (let i = 0; i < 4; i++) {
     bytes[i] = VP8.charCodeAt(frameStart + 3 + i);
@@ -430,34 +430,36 @@ class WhammyVideo {
    * Adds a frame to the video
    */
   add(frame, duration) {
-    console.log('Whammy Add : ',duration,this.duration)
-    // if (duration !== undefined && this.duration) {
-    //   throw new Error("Cannot specify duration when FPS is set");
-    // }
-    // if (duration === undefined && !this.duration) {
-    //   throw new Error("Must specify duration when FPS is not set");
-    // }
-
-    // Handle canvas context
-    if (frame.canvas) {
-      frame = frame.canvas;
-    }
-
-    // Handle canvas element
-    if (frame.toDataURL) {
-      frame = frame.getContext('2d').getImageData(0, 0, frame.width, frame.height);
-    } else if (typeof frame === 'string') {
-      if (!(/^data:image\/webp;base64,/i).test(frame)) {
-        throw new Error("String input must be a base64 encoded DataURI of type image/webp");
+    console.log('Whammy Add : ', duration, this.duration);
+    // && typeof duration !== "undefined"
+    if (!!duration) {  // if (duration !== undefined && this.duration) {
+      //   throw new Error("Cannot specify duration when FPS is set");
+      // }
+      // if (duration === undefined && !this.duration) {
+      //   throw new Error("Must specify duration when FPS is not set");
+      // }
+      // Handle canvas context
+      if (frame.canvas) {
+        frame = frame.canvas;
       }
-    } else if (!(frame instanceof ImageData)) {
-      throw new Error("Frame must be HTMLCanvasElement, CanvasRenderingContext2D, ImageData, or DataURI string");
-    }
 
-    this.frames.push({
-      image: frame,
-      duration: duration || this.duration
-    });
+      // Handle canvas element
+      if (frame.toDataURL) {
+        frame = frame.getContext('2d').getImageData(0, 0, frame.width, frame.height);
+      } else if (typeof frame === 'string') {
+        if (!(/^data:image\/webp;base64,/i).test(frame)) {
+          //throw new Error("String input must be a base64 encoded DataURI of type image/webp");
+        }
+      } else if (!(frame instanceof ImageData)) {
+        //throw new Error("Frame must be HTMLCanvasElement, CanvasRenderingContext2D, ImageData, or DataURI string");
+      }
+
+      this.frames.push({
+        image: frame,
+        duration: duration || this.duration
+      });
+    }
+    console.log('Whammy Add : ', duration, this.frames);
   }
 
   /**
@@ -516,7 +518,7 @@ class WhammyVideo {
  */
 export const Whammy = {
   Video: WhammyVideo,
-  
+
   fromImageArray(images, fps, outputAsArray = false) {
     return toWebM(
       images.map(image => {
@@ -527,6 +529,6 @@ export const Whammy = {
       outputAsArray
     );
   },
-  
+
   toWebM
 };
