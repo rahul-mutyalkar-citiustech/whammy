@@ -430,12 +430,13 @@ class WhammyVideo {
    * Adds a frame to the video
    */
   add(frame, duration) {
-    if (duration !== undefined && this.duration) {
-      throw new Error("Cannot specify duration when FPS is set");
-    }
-    if (duration === undefined && !this.duration) {
-      throw new Error("Must specify duration when FPS is not set");
-    }
+    console.log('Whammy Add : ',duration,this.duration)
+    // if (duration !== undefined && this.duration) {
+    //   throw new Error("Cannot specify duration when FPS is set");
+    // }
+    // if (duration === undefined && !this.duration) {
+    //   throw new Error("Must specify duration when FPS is not set");
+    // }
 
     // Handle canvas context
     if (frame.canvas) {
