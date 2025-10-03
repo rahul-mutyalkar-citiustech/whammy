@@ -430,7 +430,7 @@ class WhammyVideo {
    * Adds a frame to the video
    */
   add(frame, duration) {
-    console.log('Whammy Add : ', duration, this.duration);
+    console.log('Whammy Add : ', frame, duration, this.duration);
     // && typeof duration !== "undefined"
     if (!!duration) {  // if (duration !== undefined && this.duration) {
       //   throw new Error("Cannot specify duration when FPS is set");
